@@ -3,8 +3,10 @@ import { useT } from '../i18n/LanguageContext'
 export function UsageChecklist() {
   const { t } = useT()
   return (
-    <div className="rounded-lg border border-graphite-600 bg-graphite-800 p-4">
-      <h3 className="text-[15px] font-semibold text-neutral-200">{t('use.title')}</h3>
+    <div className="glass rounded-xl p-4">
+      <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400">
+        {t('use.title')}
+      </h3>
       <ol className="mt-2 list-decimal space-y-1 pl-5 text-[15px] text-neutral-400">
         <li>{t('use.step1')}</li>
         <li>
@@ -13,7 +15,7 @@ export function UsageChecklist() {
             href="https://gemini.google.com"
             target="_blank"
             rel="noreferrer"
-            className="font-medium text-gold-400 underline"
+            className="font-medium text-neutral-100 underline"
           >
             {t('use.step2geminiApp')}
           </a>{' '}
@@ -22,7 +24,7 @@ export function UsageChecklist() {
             href="https://aistudio.google.com"
             target="_blank"
             rel="noreferrer"
-            className="font-medium text-gold-400 underline"
+            className="font-medium text-neutral-100 underline"
           >
             {t('use.step2studio')}
           </a>{' '}

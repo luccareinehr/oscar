@@ -4,25 +4,45 @@
 
 html,
 body {
-  background-color: #1b1c1f;
+  background-color: #09090a;
 }
 
 body {
   font-family: 'EB Garamond', ui-serif, Georgia, serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Near-black canvas with a faint light lift behind the hero (top right). */
+  background-image:
+    radial-gradient(1200px 520px at 86% -6%, rgba(255, 255, 255, 0.07), transparent 60%),
+    linear-gradient(180deg, #09090a 0%, #0b0b0c 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
-/* Subtle, elegant scrollbars in dark mode */
+@layer components {
+  /* Translucent surface used across panels and cards. */
+  .glass {
+    @apply border border-white/10 bg-white/[0.03] backdrop-blur-xl;
+  }
+  .glass-soft {
+    @apply border border-white/[0.06] bg-white/[0.02] backdrop-blur-md;
+  }
+  /* Wide-tracked uppercase label, the signature of the layout. */
+  .eyebrow {
+    @apply font-display uppercase tracking-[0.22em];
+  }
+}
+
+/* Subtle scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #3a3e44 transparent;
+  scrollbar-color: #2a2a2c transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #3a3e44;
+  background: #2a2a2c;
   border-radius: 8px;
 }

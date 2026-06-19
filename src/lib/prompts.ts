@@ -7,35 +7,33 @@ import type {
 import { MATERIAL_PRESETS, STYLE_PRESETS, presetFragment } from './presets'
 
 /**
- * The "sober" contract prepended to every prompt. This is the heart of the app:
- * it constrains the model toward restrained, scale-accurate, geometry-preserving
- * output instead of the usual over-vegetated, golden-hour "AI slop".
+ * The contract prepended to every prompt. The goal is "sober but not bland":
+ * believable, scale-accurate, geometry-preserving output that still looks like
+ * a crafted, professionally photographed render, not a flat clay model.
  */
 export const PREAMBLE = [
-  'Photorealistic but restrained architectural visualization.',
-  'Preserve the exact geometry, proportions, and structural lines of the attached image.',
-  'Keep accurate human scale (doors ~2.1 m tall, ceilings ~2.7–3 m, standard furniture sizes).',
-  'Use climate-appropriate, sparse-to-moderate vegetation, never overgrown.',
-  'Use realistic, even daylight; neutral white balance.',
-  'Do not invent or remove structural elements unless explicitly instructed.',
+  'Photorealistic, professionally photographed architectural visualization with rich natural detail, in the style of a high-end architecture magazine.',
+  'Render crisp, tactile materials with visible texture and micro-detail, soft realistic global illumination with gentle ambient occlusion and accurate contact shadows, layered depth, and a subtle sense of atmosphere.',
+  'Preserve the exact geometry, proportions, and structural lines of the attached image, with accurate human scale (doors about 2.1 m, ceilings about 2.7 to 3 m, standard furniture sizes).',
+  'Keep it believable and tasteful: real materials, balanced natural light, and climate-appropriate planting. Restrained but not bland, with depth, warmth, and craft, and without theatrical or fantastical effects.',
 ].join(' ')
 
-/** Explicit "don'ts". Nano Banana respects negative guidance well. */
+/** Explicit "don'ts". These target only the garish failure modes, not warmth. */
 export const NEGATIVE =
   'Avoid: exaggerated or inconsistent scale, dense jungle-like or overgrown vegetation, ' +
-  'dramatic cinematic or golden-hour lighting, lens flares, bloom, heavy color grading, ' +
-  'fisheye distortion, and any fictional structural changes not present in the source image.'
+  'cartoonish or fantastical styling, oversaturated colors, heavy HDR halos, strong lens flares, ' +
+  'gaudy artificial color grading, fisheye distortion, and any fictional structural changes not present in the source image.'
 
 export function lightingFragment(s: Settings): string {
   switch (s.lighting) {
     case 'overcast':
-      return 'soft, even overcast daylight'
+      return 'soft, even overcast daylight with smooth diffuse shading and gentle cool tones'
     case 'soft-daylight':
-      return 'natural soft daylight with gentle, believable shadows'
+      return 'natural daylight with soft directional sunlight, warm highlights and believable soft shadows that give the scene depth'
     case 'dusk':
-      return 'calm dusk light with a subtle, restrained interior glow'
+      return 'warm dusk light, fading daylight balanced against a soft, inviting interior glow'
     case 'interior-ambient':
-      return 'balanced ambient interior lighting'
+      return 'balanced ambient interior lighting with warm accent pools and soft, natural shadows'
   }
 }
 
@@ -44,15 +42,15 @@ export function vegetationFragment(s: Settings): string {
     case 'none':
       return 'no added vegetation'
     case 'sparse':
-      return 'a few sparse, climate-appropriate plants'
+      return 'a few sparse, climate-appropriate plants, naturally arranged'
     case 'moderate':
-      return 'moderate, realistic landscaping (kept tidy, not overgrown)'
+      return 'lush but tidy, realistic landscaping, kept in proportion and not overgrown'
   }
 }
 
 export function peopleFragment(s: Settings): string {
   return s.people === 'sparse'
-    ? 'a few correctly scaled human figures for scale reference'
+    ? 'a few correctly scaled human figures for scale and life'
     : 'no people'
 }
 
@@ -89,8 +87,8 @@ export function heightFragment(height: CameraHeight): string {
 }
 
 /**
- * Assemble the final prompt: sober preamble + scenario body + fidelity lock +
- * output spec + negative guidance.
+ * Assemble the final prompt: rich-but-sober preamble + scenario body + fidelity
+ * lock + a quality line + output spec + negative guidance.
  */
 export function buildPrompt(def: ScenarioDef, s: Settings): string {
   const lines: string[] = [PREAMBLE, '', def.buildBody(s)]
@@ -100,6 +98,10 @@ export function buildPrompt(def: ScenarioDef, s: Settings): string {
       'Fidelity: change only what is explicitly requested above; preserve all other geometry, proportions, and structural elements exactly as in the attached image.',
     )
   }
+
+  lines.push(
+    'Quality: sharp focus, fine material textures, realistic reflections and soft shadows, gentle natural depth of field, magazine-grade architectural photography.',
+  )
 
   if (def.id === 'upscale4k') {
     lines.push('Output: maximum 4K resolution; preserve the original aspect ratio.')

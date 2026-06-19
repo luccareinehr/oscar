@@ -12,7 +12,7 @@ export function ScenarioPicker({
 }) {
   const { t } = useT()
   return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       {SCENARIOS.map((s) => {
         const active = s.id === value
         return (
@@ -20,32 +20,24 @@ export function ScenarioPicker({
             key={s.id}
             type="button"
             onClick={() => onChange(s.id)}
-            className={`group overflow-hidden rounded-xl border text-left transition-all ${
+            className={`group flex flex-col rounded-lg border p-5 text-left transition-all ${
               active
-                ? 'border-gold-500 bg-graphite-700 ring-1 ring-gold-500'
-                : 'border-graphite-600 bg-graphite-800 hover:border-graphite-500'
+                ? 'border-white/40 bg-white/[0.05]'
+                : 'border-white/10 bg-white/[0.015] hover:border-white/25 hover:bg-white/[0.03]'
             }`}
           >
             <div
-              className={`flex h-20 items-center justify-center border-b ${
-                active
-                  ? 'border-gold-600/40 bg-graphite-800 text-gold-400'
-                  : 'border-graphite-600 bg-graphite-900 text-gold-500/70 group-hover:text-gold-400'
+              className={`flex h-24 items-center justify-center ${
+                active ? 'text-neutral-100' : 'text-neutral-400 group-hover:text-neutral-200'
               }`}
             >
-              <ScenarioArt id={s.id} className="h-14 w-full px-2" />
+              <ScenarioArt id={s.id} className="h-20 w-full" />
             </div>
-            <div className="p-3">
-              <div
-                className={`font-display text-lg leading-tight ${
-                  active ? 'text-neutral-100' : 'text-neutral-200'
-                }`}
-              >
-                {t(`scenario.${s.id}.label`)}
-              </div>
-              <div className="mt-1 text-[13px] leading-snug text-neutral-400">
-                {t(`scenario.${s.id}.blurb`)}
-              </div>
+            <div className="mt-4 text-[13px] font-semibold uppercase tracking-[0.12em] text-neutral-100">
+              {t(`scenario.${s.id}.label`)}
+            </div>
+            <div className="mt-2 text-[14px] leading-snug text-neutral-500">
+              {t(`scenario.${s.id}.blurb`)}
             </div>
           </button>
         )

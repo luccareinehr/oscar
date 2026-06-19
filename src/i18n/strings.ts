@@ -3,6 +3,7 @@ export type Lang = 'pt' | 'en'
 type Dict = Record<string, string>
 
 const pt: Dict = {
+  'brand.subtitle': 'IA para arquitetura',
   tagline: 'Prompts sóbrios e em escala para arquitetura. Cole no Gemini ou no AI Studio.',
 
   'step.scenario': 'Escolha um cenário',
@@ -106,10 +107,19 @@ const pt: Dict = {
   'warn.ctxNo': '(o esboço ou render que quer mudar)',
   'warn.beforeRun': 'antes de gerar.',
 
+  // Generate + custom
+  'generate.button': 'Gerar prompt',
+  'generate.again': 'Atualizar prompt',
+  'custom.add': 'Adicionar instruções personalizadas',
+  'custom.hide': 'Ocultar instruções personalizadas',
+  'custom.placeholder':
+    'Escreva instruções extras (ex.: "piso de tacos de madeira escura", "vista para o mar ao fundo"). Serão acrescentadas ao final do prompt.',
+
   // Prompt preview
   'prompt.header': 'Prompt gerado',
   'prompt.copy': 'Copiar prompt',
   'prompt.copied': 'Copiado',
+  'prompt.placeholder': 'Clique em "Gerar prompt" para criar seu prompt aqui.',
 
   // Checklist
   'use.title': 'Como usar este prompt',
@@ -136,6 +146,7 @@ const pt: Dict = {
 }
 
 const en: Dict = {
+  'brand.subtitle': 'AI for architecture',
   tagline: 'Sober, scale-accurate render prompts for architecture. Paste into Gemini or AI Studio.',
 
   'step.scenario': 'Choose a scenario',
@@ -233,9 +244,17 @@ const en: Dict = {
   'warn.ctxNo': '(the sketch or render you want to change)',
   'warn.beforeRun': 'before running.',
 
+  'generate.button': 'Generate prompt',
+  'generate.again': 'Update prompt',
+  'custom.add': 'Add custom instructions',
+  'custom.hide': 'Hide custom instructions',
+  'custom.placeholder':
+    'Write extra instructions (e.g. "dark wood parquet floor", "ocean view in the background"). They will be appended to the end of the prompt.',
+
   'prompt.header': 'Generated prompt',
   'prompt.copy': 'Copy prompt',
   'prompt.copied': 'Copied',
+  'prompt.placeholder': 'Click "Generate prompt" to create your prompt here.',
 
   'use.title': 'How to use this prompt',
   'use.step1': 'Click "Copy prompt" above.',
