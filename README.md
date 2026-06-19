@@ -77,6 +77,44 @@ This is the part that solves the "it changed everything" problem, because the
 structure comes from a control map, not from the model's imagination. It needs no
 training dataset, only existing models and control extractors.
 
+**Model-agnostic conditioning (Nano Banana Pro as an alternative backend).**
+ControlNet itself cannot attach to Nano Banana Pro: it is a trainable network that
+injects conditioning into an open model's internal denoising layers, which requires
+the weights and control over the sampling loop. Nano Banana Pro is closed and
+API-only, so there is nothing to hook. The goal of this version (condition generation
+on the input's structure, not the model's imagination) is still partly reachable with
+it, through a different mechanism. Nano Banana Pro accepts input images, so the same
+control maps extracted above (depth, line/edge, optionally segmentation) can be passed
+as **reference images** alongside the prompt, with instructions to preserve wall
+positions, floor count, and rooflines and to restyle only materials and light. This is
+**soft guidance, not a hard lock**: there is no control-strength dial forcing fidelity,
+so it can still drift on difficult geometry. Expected fidelity ranking: text only
+(versions 1 and 2) < Nano Banana Pro with reference maps < open model with true
+ControlNet.
+
+The design consequence is to keep the pipeline **model-agnostic at the
+control-extraction step**: extract the maps once, then route to either backend. Use
+Nano Banana Pro with the maps as references when base aesthetics matter most and no
+servers are wanted; use an open model with true ControlNet when a specific drawing
+needs a hard geometry lock. (Confirm Nano Banana Pro's current multi-image reference
+behavior against Google's live API docs before relying on it; the image-input features
+change quickly.)
+
+**Are the open models good enough?** For open-ended generation Nano Banana Pro is
+generally ahead (prompt understanding, fewer artifacts, less fiddling), but this task
+is geometry-preserving restyling, where an open model with ControlNet can win on the
+axis that matters because it provides the hard lock Nano Banana Pro lacks. FLUX.1 is
+close to commercial quality and is the first open model worth benchmarking; SDXL is a
+step behind aesthetically but has the most mature ControlNet ecosystem, so its
+conditioning is the most reliable. The sober, restrained look this app targets also
+plays to a control-conditioned pipeline rather than the flashy photorealism where
+Nano Banana Pro pulls ahead. The honest answer is to measure it: a small bake-off on
+about five real input images (sketch, CAD viewport, existing render), run through
+Nano Banana Pro (prompt only), FLUX with ControlNet, and SDXL with ControlNet, scored
+on two separate axes, **geometry fidelity** (did walls, floors, and rooflines survive)
+and **aesthetic restraint** (sober versus slop). This folds into the version 1 step of
+testing on real images.
+
 **Where it runs.** Unlike versions 1 and 2, this requires real GPU inference:
 - **Local**, on a good machine. An Apple Silicon Mac runs ComfyUI through PyTorch MPS
   (slower than NVIDIA but workable for testing). Free and private.
